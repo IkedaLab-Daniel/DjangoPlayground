@@ -6,8 +6,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title']
 
-class MenuItemSerializer(serializers.ModelField):
-    category_id = serializers.IntegerField(write_onlt=True)
+class MenuItemSerializer(serializers.ModelSerializer):
+    category_id = serializers.IntegerField(write_only=True)
     category = CategorySerializer(read_only=True)
     
     class Meta:
