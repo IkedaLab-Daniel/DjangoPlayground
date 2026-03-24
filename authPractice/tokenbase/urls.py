@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CategoryView, MenuItemView, SingleMenuItemView, secret, manager_view, throttle_check
+from .views import CategoryView, MenuItemView, SingleMenuItemView, secret, manager_view, throttle_check, throttle_check_auth
 
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path('secret/', secret),
     path('api-token-auth/', obtain_auth_token),
     path('manager/', manager_view),
-    path('throttle-check/', throttle_check)
+    path('throttle-check/', throttle_check),
+    path('throttle-check-auth', throttle_check_auth)
 ]
