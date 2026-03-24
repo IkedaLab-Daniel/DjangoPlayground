@@ -34,4 +34,8 @@ def secret(request):
 @api_view()
 @permission_classes([IsAuthenticated])
 def manager_view(request):
-    return Response({"message": "Only manager should see thi"})
+    if request.user.groups.filter(name="Manager").exists():
+        return Response({"message": "Only manager should see thi"})
+    
+    return Response({"message": "You are not authorized"}, 403)
+    
