@@ -12,6 +12,7 @@ from rest_framework.decorators import permission_classes
 # > Throttle
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.decorators import throttle_classes
+from .throttle import TenCallPerMinute
 
 class CategoryView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -51,6 +52,6 @@ def throttle_check(request):
 
 @api_view()
 @permission_classes([IsAuthenticated])
-@throttle_classes([UserRateThrottle])
+@throttle_classes([TenCallPerMinute])
 def throttle_check_auth(request):
     return Response({"message": "successful"})
