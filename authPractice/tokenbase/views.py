@@ -29,3 +29,9 @@ class SingleMenuItemView(generics.RetrieveUpdateDestroyAPIView):
 @permission_classes([IsAuthenticated])
 def secret(request):
     return Response({"message": "Some Secret Message"})
+
+# > Manager view - Only for use with role "Manager"
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    return Response({"message": "Only manager should see thi"})
