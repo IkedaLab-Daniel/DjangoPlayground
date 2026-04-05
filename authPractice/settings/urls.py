@@ -20,6 +20,7 @@ import tokenbase.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(tokenbase.urls
-))
+    path('api/', include(tokenbase.urls)),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
 ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'tokenbase',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -135,10 +136,15 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 3,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '20/day',
         'user': '2/minute',
         'ten': '10/minute'
     }
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "username" # tells djoser which acts as the primary key. Sometimes u might set it to 'email', depnds of app
 }
