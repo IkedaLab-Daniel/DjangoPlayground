@@ -64,7 +64,7 @@ ROOT_URLCONF = 'settings.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,6 +156,8 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "reset-password/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
     "SEND_CONFIRMATION_EMAIL": False,
+    "DOMAIN": "localhost:3000",
+    "SITE_NAME": "Your App Name",
 }
 
 # > For testing (Console)
