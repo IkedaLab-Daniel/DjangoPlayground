@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root {
+	color: #182033;
+	font-family: "Space Grotesk", sans-serif;
+	line-height: 1.45;
+	font-weight: 400;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+.page {
+	min-height: 100vh;
+	background: radial-gradient(circle at 20% 20%, #ffe6bd, transparent 45%),
+		radial-gradient(circle at 85% 10%, #c3f2ff, transparent 45%),
+		linear-gradient(160deg, #eef2ff 0%, #fff8f0 45%, #f7fff5 100%);
+	padding: 2rem 1rem 3rem;
+	position: relative;
+}
+
+.aurora {
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(
+			115deg,
+			rgba(255, 185, 100, 0.12),
+			transparent 30%
+		),
+		linear-gradient(280deg, rgba(90, 188, 255, 0.12), transparent 35%);
+	pointer-events: none;
+}
+
+.shell {
+	max-width: 1120px;
+	margin: 0 auto;
+	position: relative;
+	z-index: 1;
+	display: grid;
+	gap: 1rem;
+}
+
+.hero {
+	border: 1px solid #d6deef;
+	border-radius: 20px;
+	padding: 1.4rem;
+	background: rgba(255, 255, 255, 0.72);
+	backdrop-filter: blur(10px);
+	animation: rise 0.55s ease;
+}
+
+.hero h1 {
+	margin: 0;
+	font-size: clamp(1.6rem, 3vw, 2.35rem);
+	letter-spacing: -0.03em;
+}
+
+.hero p {
+	margin: 0.5rem 0 0;
+	max-width: 65ch;
+}
+
+.kicker {
+	margin: 0 0 0.35rem;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	font-size: 0.73rem;
+	color: #4d5f89;
+	font-weight: 700;
+}
+
+.grid {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.panel {
+	border: 1px solid #d6deef;
+	background: rgba(255, 255, 255, 0.85);
+	border-radius: 16px;
+	padding: 1rem;
+	display: grid;
+	gap: 0.7rem;
+	animation: rise 0.6s ease;
+}
+
+.settings-panel {
+	gap: 0.45rem;
+}
+
+.panel h2 {
+	margin: 0;
+	font-size: 1.02rem;
+}
+
+label {
+	font-size: 0.82rem;
+	color: #435379;
+	font-weight: 600;
+}
+
+input {
+	border: 1px solid #bfcae3;
+	border-radius: 10px;
+	font-size: 0.94rem;
+	padding: 0.65rem 0.75rem;
+	font-family: inherit;
+	background: #fff;
+}
+
+input:focus {
+	outline: 2px solid #99c2ff;
+	border-color: #7ea9ee;
+}
+
+button {
+	border: 0;
+	border-radius: 10px;
+	padding: 0.63rem 0.8rem;
+	background: linear-gradient(135deg, #2f6feb, #4e8cff);
+	color: #fff;
+	cursor: pointer;
+	font-weight: 600;
+	font-family: inherit;
+}
+
+button.secondary {
+	background: #e9eef9;
+	color: #233054;
+}
+
+button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.token-line,
+.hint {
+	margin: 0;
+	color: #586992;
+	font-size: 0.84rem;
+}
+
+.log-panel ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: grid;
+	gap: 0.65rem;
+}
+
+.log-panel li {
+	border: 1px solid #d9e1f4;
+	border-radius: 10px;
+	padding: 0.65rem;
+}
+
+.log-panel li.ok {
+	background: #f4fff6;
+	border-color: #bee2c7;
+}
+
+.log-panel li.fail {
+	background: #fff4f4;
+	border-color: #f2c3c3;
+}
+
+.log-panel p {
+	margin: 0;
+	font-size: 0.86rem;
+}
+
+pre {
+	margin: 0.45rem 0 0;
+	white-space: pre-wrap;
+	word-break: break-word;
+	background: rgba(26, 36, 61, 0.88);
+	color: #ebf0ff;
+	border-radius: 8px;
+	padding: 0.56rem;
+	font-size: 0.77rem;
+	font-family: "IBM Plex Mono", monospace;
+}
+
+.log-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 560px) {
+	.page {
+		padding-top: 1.2rem;
+	}
+
+	.panel,
+	.hero {
+		border-radius: 14px;
+	}
+}
