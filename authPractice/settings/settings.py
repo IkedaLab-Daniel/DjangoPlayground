@@ -10,6 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'tokenbase',
     'djoser',
+    'templated_mail',
 ]
 
 MIDDLEWARE = [
@@ -146,5 +152,23 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-    "USER_ID_FIELD": "username" # tells djoser which acts as the primary key. Sometimes u might set it to 'email', depnds of app
+    "USER_ID_FIELD": "username", # tells djoser which acts as the primary key. Sometimes u might set it to 'email', depnds of app
+    "PASSWORD_RESET_CONFIRM_URL": "reset-password/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SEND_CONFIRMATION_EMAIL": False,
 }
+
+# > For testing (Console)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# > Real email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
