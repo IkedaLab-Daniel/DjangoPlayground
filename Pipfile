@@ -9,6 +9,7 @@ djangorestframework = "*"
 djoser = "*"
 django-templated-mail = "*"
 python-dotenv = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
