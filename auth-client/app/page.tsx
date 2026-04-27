@@ -16,9 +16,14 @@ export default function AdminLogin() {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://127.0.0.1:8000';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetError, setResetError] = useState('');
+  const [resetSuccessMessage, setResetSuccessMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,6 +95,44 @@ export default function AdminLogin() {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setIsResetLoading(true);
+    setResetError('');
+    setResetSuccessMessage('');
+
+    try {
+      const resetResponse = await fetch(`${apiBaseUrl}/api/auth/users/reset_password/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+
+      if (!resetResponse.ok) {
+        const resetErrorData = await resetResponse.json().catch(() => null);
+        const detail =
+          resetErrorData?.email?.[0] ||
+          resetErrorData?.detail ||
+          'Unable to process password reset request.';
+        throw new Error(detail);
+      }
+
+      setResetSuccessMessage(
+        'If the email is registered, a password reset link has been sent.'
+      );
+      setResetEmail('');
+    } catch (err) {
+      if (err instanceof Error) {
+        setResetError(err.message);
+      } else {
+        setResetError('Unable to connect to password reset service.');
+      }
+    } finally {
+      setIsResetLoading(false);
     }
   };
 
@@ -211,7 +254,15 @@ export default function AdminLogin() {
                   <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block" htmlFor="password">
                     Password
                   </label>
-                  <button type="button" className="text-[11px] font-bold text-[#0B3D91] hover:underline uppercase focus:outline-none">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForgotPassword((prev) => !prev);
+                      setResetError('');
+                      setResetSuccessMessage('');
+                    }}
+                    className="text-[11px] font-bold text-[#0B3D91] hover:underline uppercase focus:outline-none"
+                  >
                     Forgot?
                   </button>
                 </div>
@@ -237,6 +288,54 @@ export default function AdminLogin() {
                   </button>
                 </div>
               </div>
+
+              <AnimatePresence>
+                {showForgotPassword && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden rounded-md border border-blue-200 bg-blue-50 p-4"
+                  >
+                    <div className="space-y-3">
+                      <div>
+                        <label
+                          htmlFor="reset-email"
+                          className="block text-xs font-bold text-blue-900 uppercase tracking-wider mb-1.5"
+                        >
+                          Account Email
+                        </label>
+                        <input
+                          id="reset-email"
+                          type="email"
+                          required
+                          value={resetEmail}
+                          onChange={(e) => setResetEmail(e.target.value)}
+                          className="w-full px-3 py-2.5 bg-white border border-blue-200 rounded text-gray-900 placeholder:text-gray-500 caret-[#0B3D91] focus:ring-2 focus:ring-[#0B3D91] focus:border-transparent outline-none transition-all text-sm"
+                          placeholder="name@example.com"
+                        />
+                      </div>
+
+                      {resetError && (
+                        <p className="text-xs text-red-700 font-medium">{resetError}</p>
+                      )}
+
+                      {resetSuccessMessage && (
+                        <p className="text-xs text-green-700 font-medium">{resetSuccessMessage}</p>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={handleForgotPassword}
+                        disabled={isResetLoading}
+                        className="w-full bg-[#0B3D91] text-white py-2.5 rounded font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                        {isResetLoading ? 'Sending reset link...' : 'Send reset link'}
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <div className="flex items-center space-x-2">
                 <input

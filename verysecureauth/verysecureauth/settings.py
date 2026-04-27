@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,6 +152,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/confirm/{uid}/{token}',
+    'EMAIL_FRONTEND_DOMAIN': 'localhost:3000',
+    'EMAIL_FRONTEND_PROTOCOL': 'http',
+    'EMAIL_FRONTEND_SITE_NAME': 'Mabalacat City Access Portal',
     'SERIALIZERS': {
         'user_create': 'tokenbase.serializers.GovernmentUserCreateSerializer',
         'user': 'tokenbase.serializers.GovernmentUserSerializer',
@@ -161,3 +168,10 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API documentation for my Django project',
     'VERSION': '1.0.0',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ultimatehunter63@gmail.com'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
