@@ -57,9 +57,31 @@ export default function AdminLogin() {
         throw new Error('Authentication succeeded but portal access failed.');
       }
 
+      const portalData: { profile?: { role?: string } } = await portalResponse
+        .json()
+        .catch(() => ({}));
+
+      const role = portalData.profile?.role?.toUpperCase();
+      const redirectByRole: Record<string, string> = {
+        HR: 'http://localhost:5173/',
+        ADMIN: 'http://localhost:5174/',
+        RECRUITMENT: 'http://localhost:5175/',
+      };
+
+      const redirectUrl = role ? redirectByRole[role] : undefined;
+
+      if (!redirectUrl) {
+        throw new Error('Authenticated, but your account role is not recognized.');
+      }
+
       localStorage.setItem('accessToken', tokenData.access);
       localStorage.setItem('refreshToken', tokenData.refresh);
       setIsSuccess(true);
+
+      // Show the success state briefly, then route to the role-specific app.
+      window.setTimeout(() => {
+        window.location.assign(redirectUrl);
+      }, 700);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

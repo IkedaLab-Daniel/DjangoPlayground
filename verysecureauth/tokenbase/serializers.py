@@ -18,5 +18,5 @@ class GovernmentUserSerializer(UserSerializer):
 class GovernmentCurrentUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = GovernmentUser
-        fields = ("id", "username", "email", "government_id", "mfa_verified", "aura")
+        fields = ("id", "username", "email", "government_id", "mfa_verified", "aura", "role")
         read_only_fields = ("government_id",)

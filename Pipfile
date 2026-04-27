@@ -11,6 +11,7 @@ django-templated-mail = "*"
 python-dotenv = "*"
 djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 
