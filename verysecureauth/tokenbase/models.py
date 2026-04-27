@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager
+from django.contrib.auth.hashers import identify_hasher, make_password
 import uuid
 
 
@@ -59,6 +60,16 @@ class GovernmentUser(AbstractUser):
     REQUIRED_FIELDS = ["email", "mfa_verified",]
 
     objects = GovernmentUserManager()
+
+    def save(self, *args, **kwargs):
+        # Guardrail: if a raw password is assigned directly, hash it before save.
+        if self.password and not self.password.startswith("!"):
+            try:
+                identify_hasher(self.password)
+            except Exception:
+                self.password = make_password(self.password)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.username} {self.government_id}'

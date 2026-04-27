@@ -10,6 +10,7 @@ djoser = "*"
 django-templated-mail = "*"
 python-dotenv = "*"
 djangorestframework-simplejwt = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

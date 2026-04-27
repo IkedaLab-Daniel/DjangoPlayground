@@ -13,6 +13,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function AdminLogin() {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://127.0.0.1:8000';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,15 +26,49 @@ export default function AdminLogin() {
     setIsLoading(true);
     setError('');
 
-    // Simulate authentication
-    setTimeout(() => {
-      if (username === 'admin' && password === 'admin') {
-        setIsSuccess(true);
-      } else {
-        setError('Invalid credentials. Access denied.');
-        setIsLoading(false);
+    try {
+      const loginResponse = await fetch(`${apiBaseUrl}/api/auth/jwt/create/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!loginResponse.ok) {
+        const loginErrorData = await loginResponse.json().catch(() => null);
+        const detail =
+          loginErrorData?.detail ||
+          loginErrorData?.non_field_errors?.[0] ||
+          'Invalid credentials. Access denied.';
+        throw new Error(detail);
       }
-    }, 1500);
+
+      const tokenData: { access: string; refresh: string } = await loginResponse.json();
+
+      const portalResponse = await fetch(`${apiBaseUrl}/api/portal/`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${tokenData.access}`,
+        },
+      });
+
+      if (!portalResponse.ok) {
+        throw new Error('Authentication succeeded but portal access failed.');
+      }
+
+      localStorage.setItem('accessToken', tokenData.access);
+      localStorage.setItem('refreshToken', tokenData.refresh);
+      setIsSuccess(true);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Unable to connect to authentication server.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSuccess) {
@@ -143,7 +178,7 @@ export default function AdminLogin() {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded focus:ring-2 focus:ring-[#0B3D91] focus:border-transparent outline-none transition-all text-sm"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded text-gray-900 placeholder:text-gray-500 caret-[#0B3D91] focus:ring-2 focus:ring-[#0B3D91] focus:border-transparent outline-none transition-all text-sm"
                     placeholder="Enter your credential ID"
                   />
                 </div>
@@ -168,7 +203,7 @@ export default function AdminLogin() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-300 rounded focus:ring-2 focus:ring-[#0B3D91] focus:border-transparent outline-none transition-all text-sm tracking-widest"
+                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-300 rounded text-gray-900 placeholder:text-gray-500 caret-[#0B3D91] focus:ring-2 focus:ring-[#0B3D91] focus:border-transparent outline-none transition-all text-sm tracking-widest"
                     placeholder="••••••••"
                   />
                   <button
@@ -213,11 +248,11 @@ export default function AdminLogin() {
           </div>
           
           {/* Security Banner Bottom */}
-          <div className="bg-red-50 border-t border-red-100 p-4">
+          {/* <div className="bg-red-50 border-t border-red-100 p-4">
              <p className="text-[10px] text-red-800 leading-tight text-center font-medium">
                WARNING: This is a secure government system. Unauthorized access is prohibited and subject to criminal prosecution. All activities are monitored and recorded.
              </p>
-          </div>
+          </div> */}
         </div>
       </motion.div>
 
