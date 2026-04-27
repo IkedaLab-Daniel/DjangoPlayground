@@ -30,6 +30,12 @@ class GovernmentUser(AbstractUser):
         MID = 'MID', 'Mid'
         LOW = 'LOW', 'Low'
 
+    class Role(models.TextChoices):
+        HR = "HR", "Hr"
+        ADMIN = "ADMIN", "Admin"
+        RECRUITMENT = "RECRUITMENT", "Recruitment"
+        
+
     
     government_id = models.CharField(
         max_length=30, 
@@ -44,7 +50,13 @@ class GovernmentUser(AbstractUser):
         default=Aura.MID
     )
 
-    REQUIRED_FIELDS = ["email", "mfa_verified"]
+    role = models.CharField(
+        max_length=30,
+        choices=Role.choices,
+        default=Role.ADMIN
+    )
+
+    REQUIRED_FIELDS = ["email", "mfa_verified",]
 
     objects = GovernmentUserManager()
 

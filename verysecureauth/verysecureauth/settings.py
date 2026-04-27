@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'djoser',
     'tokenbase',
+    'drf_spectacular',
 ]
 
 AUTH_USER_MODEL = 'tokenbase.GovernmentUser'
@@ -126,3 +127,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'tokenbase.serializers.GovernmentUserCreateSerializer',
+        'user': 'tokenbase.serializers.GovernmentUserSerializer',
+        'current_user': 'tokenbase.serializers.GovernmentCurrentUserSerializer',
+    },
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My API',
+    'DESCRIPTION': 'API documentation for my Django project',
+    'VERSION': '1.0.0',
+}
