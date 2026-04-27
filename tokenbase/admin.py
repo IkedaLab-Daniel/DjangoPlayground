@@ -33,7 +33,6 @@ class GovernmentUserAdmin(UserAdmin):
 			'Government Access',
 			{
 				'fields': (
-					'government_id',
 					'agency_name',
 					'security_clearance',
 				)

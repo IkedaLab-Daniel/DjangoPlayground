@@ -14,7 +14,6 @@ class GovernmentUserCreateSerializer(UserCreateSerializer):
             'last_name',
             'password',
             're_password',
-            'government_id',
             'agency_name',
             'security_clearance',
         )
